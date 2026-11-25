@@ -6,6 +6,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>logic</module>
+        <module>GUI</module>
     </modules>
     <dependencyManagement>
         <dependencies>
