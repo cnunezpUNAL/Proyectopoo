@@ -18,7 +18,7 @@ public class app {
         Scanner scanner = new Scanner(System.in);
         String ticker1 = scanner.next().toUpperCase();
         Stock stock1 = new Stock(ticker1);
-        stock1.history();
+        System.out.println(stock1.history().get(0).getClose());
         /*
         ApiClient client = Twelvedata.newApiClient(org.example.logic.CONSTANTS.apiKey); // defaults to System.getenv("TWELVEDATA_API_KEY")
         MarketDataApi api = new MarketDataApi(client);

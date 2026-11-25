@@ -61,7 +61,7 @@ abstract class Product {
                     .symbol(this.ticker)
                     .startDate("2026-10-01")
                     .interval(IntervalEnum._1DAY)
-                    .endDate("2026-11-22")
+                    .endDate("2026-11-25")
                     .build());
             return response.getValues();
 
