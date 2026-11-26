@@ -1,6 +1,7 @@
 package org.example.gui;
 
 import com.twelvedata.client.ApiException;
+import com.twelvedata.client.model.IntervalEnum;
 import com.twelvedata.client.model.TimeSeriesItem;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -8,12 +9,15 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import org.example.logic.Stock;
 
 import java.lang.Math;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.List;
 
 public class HelloController{
@@ -38,9 +42,20 @@ public class HelloController{
     @FXML
     TextField textfield;
 
+    @FXML
+    DatePicker eDate;
+    @FXML
+    DatePicker sDate;
+
+    @FXML
+    ChoiceBox choiceBox;
+
+
 
     @FXML
     private void initialize(){
+        choiceBox.getItems().addAll(IntervalEnum.values());
+        choiceBox.setValue(IntervalEnum.values()[9]);
         lineChart.setTitle("Testing Area");
         XYChart.Series series = new XYChart.Series();
         XYChart.Series series2 = new XYChart.Series();
@@ -61,6 +76,11 @@ public class HelloController{
         lineChart.setAnimated(false);
     }
 
+
+    private void submit(ActionEvent event){
+        LocalDateTime endate = ((DatePicker)(event.getSource())).getValue().atTime(LocalTime.of(4,0));
+    }
+
     @FXML
     private void toSubmit(ActionEvent event){
         if(textfield.getText().isEmpty());
@@ -69,7 +89,7 @@ public class HelloController{
             textfield.clear();
             try {
                 Stock stock = new Stock(label.getText());
-                List<TimeSeriesItem> list = stock.history();
+                List<TimeSeriesItem> list = stock.history(sDate.getValue().atTime(LocalTime.of(9,30)).toString(),eDate.getValue().atTime(LocalTime.of(16,0)).toString(),(IntervalEnum) choiceBox.getValue());
                 lineChart.getData().clear();
                 CategoryAxis xaxis = (CategoryAxis) lineChart.getXAxis();//Debug candidate
                 xaxis.getCategories().clear();//D
@@ -80,7 +100,7 @@ public class HelloController{
                     TimeSeriesItem item = list.get(i);
                     min = (Double.parseDouble(item.getClose())<min)? Double.parseDouble(item.getClose()): min;
                     max = (Double.parseDouble(item.getClose())>max)? Double.parseDouble(item.getClose()): max;
-                    series.getData().add(new XYChart.Data(String.valueOf(item.getDatetime()),Double.parseDouble(item.getClose())));
+                    series.getData().add(new XYChart.Data(item.getDatetime().substring(0,item.getDatetime().lastIndexOf(":")), Double.parseDouble(item.getClose())));
                 }
                 lineChart.getYAxis().autoRangingProperty().setValue(false);
                 NumberAxis yaxis = (NumberAxis) lineChart.getYAxis();

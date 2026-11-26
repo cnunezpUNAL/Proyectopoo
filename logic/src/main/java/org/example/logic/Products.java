@@ -16,6 +16,7 @@ abstract class Product {
     protected String name;
     protected String description;
     protected String ticker;
+    protected String exchange;
 
     public double getPrice() {
         return price;
@@ -48,20 +49,21 @@ abstract class Product {
         this.volume = Double.parseDouble(response.getVolume());
         this.name = response.getName();
         this.description = response.getName();
+        this.exchange = response.getExchange();
 
     } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
-    public List<TimeSeriesItem> history() throws ApiException {
+    public List<TimeSeriesItem> history(String sDate, String eDate,IntervalEnum intervalo) throws ApiException {
         ApiClient apiClient = Twelvedata.newApiClient(CONSTANTS.apiKey);
         MarketDataApi api = new MarketDataApi(apiClient);
         try{
             GetTimeSeries200Response response = api.getTimeSeries(MarketDataApi.APIGetTimeSeriesRequest.newBuilder()
                     .symbol(this.ticker)
-                    .startDate("2026-10-01")
-                    .interval(IntervalEnum._1DAY)
-                    .endDate("2026-11-25")
+                    .startDate(sDate)
+                    .interval(intervalo)
+                    .endDate(eDate)
                     .build());
             return response.getValues();
 

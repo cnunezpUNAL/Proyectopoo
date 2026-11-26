@@ -7,18 +7,20 @@ import com.twelvedata.client.errors.TwelvedataApiException;
 import com.twelvedata.client.model.GetTimeSeries200Response;
 import com.twelvedata.client.model.IntervalEnum;
 import com.twelvedata.client.model.TimeSeriesItem;
+import org.example.logic.Exchange;
 import org.example.logic.Stock;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
 public class app {
     public static void main(String[] args) throws ApiException {
         System.out.println("Ingrese un ticker");
-        Scanner scanner = new Scanner(System.in);
-        String ticker1 = scanner.next().toUpperCase();
-        Stock stock1 = new Stock(ticker1);
-        System.out.println(stock1.history().get(0).getClose());
+        System.out.println(Exchange.NASDAQ.getOpeningTime().toString());
+        //String ticker1 = scanner.next().toUpperCase();
+        //Stock stock1 = new Stock(ticker1);
+        //System.out.println(stock1.history().get(0).getClose());
         /*
         ApiClient client = Twelvedata.newApiClient(org.example.logic.CONSTANTS.apiKey); // defaults to System.getenv("TWELVEDATA_API_KEY")
         MarketDataApi api = new MarketDataApi(client);
